@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %} 
+
+{% block title %}Publication index{% endblock %}
+
+{% block body %}
+
+    <style>
+        .rating {
+            display: inline-block;
+            width: 100%;
+            margin-top: 40px;
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        .like {
+            display: inline-block;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .like:hover {
+            color: #2EBDD1;
+            transition: all .2s ease-in-out;
+            transform: scale(1.1);
+        }
+
+        .active {
+            color: red; /* Change to red when active */
+        }
+
+        .commentaire-inactif {
+            display: none;
+        }
+        .commentaire-text {
+            color: black;
+        }
+        
+        /* Updated styles for the like icon */
+        .like-icon {
+            color: rgb(148, 35, 73); /* Start with white color */
+        }
+
+        .like-icon.active {
+            color: rgb(43, 11, 25); /* Change to red when active */
+        }
+    </style>
+
+    <div class="container mt-5">
+        <div class="position-relative">
+            <button type="button" class="btn btn-primary position-relative" id="inbox-button">
+                Inbox
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">1<span class="visually-hidden"></span>
+                </span>
+            </button>
+            
+            <span class="badge bg-light text-dark position-absolute top-0 end-100 translate-middle badge rounded-pill bg-danger inbox-message" id="inbox-icon" style="display: none;">
+                Commentaire ajouté avec succées !
+            </span>
+
+        </div>
+        <div class="row justify-content-center">
+
+            <div class="col-md-6 mb-4 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <span style="color: rgb(241, 8, 125);">Titre: {{ publication.titre }} </span>
+                        <div class="card-footer text-muted text-right">
+                            <span style="color: rgb(241, 8, 125);"> {{ publication.datepub|date('Y-m-d') }}</span>
+                        </div>
+                        {% if publication.image %}
+                            <img src="{{ asset('uploads/' ~ publication.image) }}" alt="Publication Image" class="img-fluid mb-3 publication-image">
+                        {% endif %}
+                        <p class="card-text" style="color: black;">{{ publication.Contenu|slice(0, 150) }}{{ publication.Contenu|length > 150 ? '...' : '' }}</p>
+                    </div>
+                    <div class="card-footer text-muted" style="color: black;">
+                        <strong style="color: rgb(241, 8, 125);">Commentaires:</strong>
+                        {% if publication.commentaires %}
+    {% for commentaire in publication.commentaires %}
+        {% if commentaire.isActive %}
+            <div class="commentaire">
+                <span class="commentaire-username">{{ commentaire.user.username }}</span> <!-- Ajout du nom d'utilisateur -->
+                <span class="commentaire-text">{{ commentaire.description }}</span>
+                
+                <span class="like-commentaire" data-commentaire-id="{{ commentaire.id }}">
+                    <!-- Updated like icon with white color -->
+                    <i class="far fa-heart fa-lg like-icon" aria-hidden="true"></i>
+                    <span class="likes-count">{{ commentaire.likes }}</span>
+                </span>
+            </div>
+        {% else %}
+            <div class="commentaire commentaire-inactif">
+                <span class="commentaire-username">{{ commentaire.user.username }}</span> <!-- Ajout du nom d'utilisateur -->
+                <span class="commentaire-text">{{ commentaire.description }}</span>
+                <span class="commentaire-date"> - {{ commentaire.datecomnt|date('Y-m-d H:i:s') }}</span> <!-- Affichage de la date du commentaire -->
+                
+            </div>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <span style="color: black;">Aucun commentaire.</span>
+{% endif %}
+
+                    </div>
+                    <div class="card-footer text-muted text-right">   
+                        <a href="{{ path('app_commentaire_new', {'id': publication.id}) }}" class="btn btn-sm btn-primary">Ajouter commentaire</a>
+                    </div>
+                    <div class=" text-muted text-left">
+                        <a href="{{ path('app_front_index') }}" style="color: rgb(241, 8, 125); text-decoration: underline;">Retour à la liste</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var commentairesInactifs = document.querySelectorAll('.commentaire-inactif');
+            commentairesInactifs.forEach(function(commentaire) {
+                commentaire.style.display = 'none';
+            });
+
+            var likeCommentaireIcons = document.querySelectorAll('.like-commentaire .like-icon');
+            likeCommentaireIcons.forEach(function(icon) {
+                icon.addEventListener('click', function() {
+                    var commentaireId = this.parentElement.dataset.commentaireId;
+                    var likesCountElement = this.parentElement.querySelector('.likes-count');
+                    var likesCount = parseInt(likesCountElement.textContent);
+                    
+                    if (this.classList.contains('active')) {
+                        // Decrement the counter if already active
+                        likesCount--;
+                    } else {
+                        // Increment the counter if not active
+                        likesCount++;
+                    }
+                    
+                    // Update the counter
+                    likesCountElement.textContent = likesCount;
+
+                    // Toggle active class for the like icon
+                    this.classList.toggle('active');
+                    
+                    // Send an AJAX request to update likes count in the backend
+                    fetch('/commentaire/' + commentaireId + '/like', {
+                        method: 'POST'
+                    }).then(response => {
+                        if (response.ok) {
+                            // Likes count updated successfully
+                        } else {
+                            // Handle error
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sélection du formulaire d'ajout de commentaire
+            const commentForm = document.getElementById('comment-form');
+    
+            // Ajout d'un écouteur d'événement pour la soumission du formulaire
+            commentForm.addEventListener('submit', function(event) {
+                // Empêcher le comportement par défaut du formulaire (rechargement de la page)
+                event.preventDefault();
+    
+                // Afficher un message de succès
+                alert('Commentaire ajouté avec succès');
+            });
+        });
+    </script>
+    
+    
+{% endblock %}

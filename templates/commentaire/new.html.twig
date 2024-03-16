@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Commentaire{% endblock %}
+
+{% block body %}
+<div style="padding:150px;">
+    <h1>Create new Commentaire</h1>
+
+    {{ include('commentaire/_form.html.twig') }}
+
+    <a href="{{ path('app_front_index') }}">back to list</a>
+</div>
+{% endblock %}

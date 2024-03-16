@@ -1,0 +1,68 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Type{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        .content-container {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .table {
+            background-color: #222;
+            color: white;
+        }
+
+        .table th, .table td {
+            border: none;
+            vertical-align: middle;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container text-center">
+        <div class="content-container">
+            <h1>Type</h1>
+
+            <table class="table table-bordered table-striped">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ type.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Type</th>
+                        <td>{{ type.type }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <a href="{{ path('app_type_index') }}" class="btn">Back to list</a>
+            <a href="{{ path('app_type_edit', {'id': type.id}) }}" class="btn">Edit</a>
+
+            {{ include('type/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

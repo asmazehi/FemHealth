@@ -1,0 +1,65 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}New Type{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        .content-container {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 50px; /* Add margin to push content down */
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="content-container">
+            <h1 class="text-center">Create new Type</h1>
+
+            <div class="form-container">
+                {{ include('type/_form.html.twig') }}
+            </div>
+
+            <div class="text-center mt-3">
+                <a href="{{ path('app_type_index') }}" class="btn">Back to list</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

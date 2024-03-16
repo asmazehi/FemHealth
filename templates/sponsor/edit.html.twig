@@ -1,0 +1,20 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Editer Sponsor{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Editer ce Sponsor</h1>
+            <div class="card mb-4">
+                <div class="card-body">
+                    {{ include('sponsor/_form.html.twig', {'button_label': 'Update'}) }}
+                </div>
+            </div>
+            <div class="mt-4">
+                <a href="{{ path('app_sponsor_index') }}" class="btn btn-secondary btn-block">Retourner à la liste des Sponsors</a>
+            </div>
+        </div>
+    </div>
+    <script src="{{ asset('js/main.js') }}"></script>
+{% endblock %}

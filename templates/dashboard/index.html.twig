@@ -1,0 +1,130 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Statistiques du nombre des produits de chaque Sponsor</h4>
+            <canvas id="pieChart-sponsors" style="height:250px"></canvas>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+<div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-lg-6 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Statistiques du nombre de commentaires par publication</h4>
+              <canvas id="pieChart-publications" style="height:250px"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javaScripts %}
+<script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script src="../../assets/vendors/chart.js/Chart.min.js"></script>
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script src="../../assets/js/off-canvas.js"></script>
+<script src="../../assets/js/hoverable-collapse.js"></script>
+<script src="../../assets/js/misc.js"></script>
+<script src="../../assets/js/settings.js"></script>
+<script src="../../assets/js/todolist.js"></script>
+<!-- endinject -->
+<!-- Custom js for this page -->
+<script src="../../assets/js/chart.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var rawData = {{stats|json_encode()|raw}} 
+        console.log(rawData);
+        var SponsorData = {
+            datasets:[{
+                data: rawData.map(data=>data.products_count),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)',
+                    'rgba(255, 159, 64, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+            }],
+          
+            labels:rawData.map(data =>data.sponsor_name)
+        };
+      
+        var doughnutPieOptions = {
+            responsive: true,
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        };
+      
+        if ($("#pieChart-sponsors").length) {
+            var pieChartCanvas = $("#pieChart-sponsors").get(0).getContext("2d");
+            var pieChart = new Chart(pieChartCanvas, {
+                type: 'pie',
+                data: SponsorData,
+                options: doughnutPieOptions
+            });
+        }
+    });    
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var rawData = {{ publicationStats|json_encode()|raw }};
+        var publicationNames = rawData.map(function(item) {
+            return item.publicationId;
+        });
+        var commentCounts = rawData.map(function(item) {
+            return item.commentCount;
+        });
+
+        var ctx = document.getElementById('pieChart-publications').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: publicationNames,
+                datasets: [{
+                    label: 'Nombre de commentaires',
+                    data: commentCounts,
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

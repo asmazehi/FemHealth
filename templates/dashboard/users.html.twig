@@ -1,0 +1,215 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+
+{% block body %}
+    <style>
+        #chartdiv {
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title"> Basic Tables </h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Tables</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Basic tables</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Liste des utilisateurs</h4>
+                        <ul class="navbar-nav w-50">
+                            <li class="nav-item w-50">
+                                <form action="{{ path('users_registration_date') }}" method="post"
+                                      class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                                    <input {% if date is defined and date %}value="{{ date }}"{% endif %}
+                                           style="background-color: white;color: black" type="date"
+                                           name="registrationDate"
+                                           class="form-control" placeholder="Search User">
+                                    <button type="submit" class="btn btn-primary ml-2">Search</button>
+                                </form>
+                            </li>
+                        </ul>
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Roles</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.email }}</td>
+                                        <td>
+                                            <form action="{{ path('app_change_role',{"id":user.id}) }}" method="post">
+                                                <select name="role" onchange="this.form.submit()" style="color: white"
+                                                        class="form-control">
+                                                    <option {% if "ROLE_ADMIN" in user.roles %}selected{% endif %}
+                                                            value="ROLE_ADMIN">Admnistrateur
+                                                    </option>
+                                                    <option {% if "ROLE_CLIENT" in user.roles %}selected{% endif %}
+                                                            value="ROLE_CLIENT">Client
+                                                    </option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form action="{{ path('app_activation_user',{"id":user.id}) }}"
+                                                  method="post">
+                                                <select name="actif" onchange="this.form.submit()" style="color: white"
+                                                        class="form-control">
+                                                    <option {% if user.active %}selected{% endif %}
+                                                            value="actif">Actif
+                                                    </option>
+                                                    <option {% if not user.active %}selected{% endif %}
+                                                            value="inactif">Inactif
+                                                    </option>
+                                                </select>
+                                            </form>
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <hr>
+                        <h4 class="card-title">Statistiques</h4>
+                        <div style="background-color: white">
+                            <div id="chartdiv"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+{% block javaScripts %}
+    {{ parent() }}
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <script>
+        /**
+         * ---------------------------------------
+         * This demo was created using amCharts 5.
+         *
+         * For more information visit:
+         * https://www.amcharts.com/
+         *
+         * Documentation is available at:
+         * https://www.amcharts.com/docs/v5/
+         * ---------------------------------------
+         */
+
+// Create root element
+// https://www.amcharts.com/docs/v5/getting-started/#Root_element
+        var root = am5.Root.new("chartdiv");
+
+        // Set themes
+        // https://www.amcharts.com/docs/v5/concepts/themes/
+        root.setThemes([
+            am5themes_Animated.new(root)
+        ]);
+
+        // Create chart
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/
+        var chart = root.container.children.push(am5xy.XYChart.new(root, {
+            panX: true,
+            panY: true,
+            wheelX: "panX",
+            wheelY: "zoomX",
+            pinchZoomX: true,
+            paddingLeft: 0,
+            paddingRight: 1
+        }));
+
+        // Add cursor
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+        var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+        cursor.lineY.set("visible", false);
+
+
+        // Create axes
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+        var xRenderer = am5xy.AxisRendererX.new(root, {
+            minGridDistance: 30,
+            minorGridEnabled: true
+        });
+
+        xRenderer.labels.template.setAll({
+            rotation: -90,
+            centerY: am5.p50,
+            centerX: am5.p100,
+            paddingRight: 15
+        });
+
+        xRenderer.grid.template.setAll({
+            location: 1
+        })
+
+        var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+            maxDeviation: 0.3,
+            categoryField: "registerDate",
+            renderer: xRenderer,
+            tooltip: am5.Tooltip.new(root, {})
+        }));
+
+        var yRenderer = am5xy.AxisRendererY.new(root, {
+            strokeOpacity: 0.1
+        })
+
+        var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+            maxDeviation: 0.3,
+            renderer: yRenderer
+        }));
+
+        // Create series
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+        var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+            name: "Series 1",
+            xAxis: xAxis,
+            yAxis: yAxis,
+            valueYField: "value",
+            sequencedInterpolation: true,
+            categoryXField: "registerDate",
+            tooltip: am5.Tooltip.new(root, {
+                labelText: "{valueY}"
+            })
+        }));
+
+        series.columns.template.setAll({cornerRadiusTL: 5, cornerRadiusTR: 5, strokeOpacity: 0});
+        series.columns.template.adapters.add("fill", function (fill, target) {
+            return chart.get("colors").getIndex(series.columns.indexOf(target));
+        });
+
+        series.columns.template.adapters.add("stroke", function (stroke, target) {
+            return chart.get("colors").getIndex(series.columns.indexOf(target));
+        });
+
+
+        // Set data
+
+        var data = {{ stats | raw }};
+        xAxis.data.setAll(data);
+        series.data.setAll(data);
+
+
+        // Make stuff animate on load
+        // https://www.amcharts.com/docs/v5/concepts/animations/
+        series.appear(1000);
+        chart.appear(1000, 100);
+    </script>
+{% endblock %}
+

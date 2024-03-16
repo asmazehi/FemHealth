@@ -1,0 +1,36 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title"> profil </h3>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Modifier profil</h4>
+                        {% for message in app.flashes('success') %}
+                            <div class="alert alert-success" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                        {% if app.user %}
+                            <p>Bienvenue, {{ app.user.username }}!</p>
+
+                            {{ form_start(form) }}
+                            {{ form_row(form.email) }}
+                            {{ form_row(form.nom) }}
+                            {# Ajoutez d'autres champs de profil que vous souhaitez modifier ici #}
+                            {{ form_row(form._token) }}
+                            <button type="submit">Enregistrer</button>
+                            {{ form_end(form) }}
+                        {% else %}
+                            <p>Vous devez être connecté pour accéder à cette page.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

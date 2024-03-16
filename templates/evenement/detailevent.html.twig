@@ -1,0 +1,60 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    <h1 class="text-center mb-4" style="color: #ff69b4;">Evenement Index</h1>
+{% endblock %}
+
+{% block body %}
+<main>
+
+    <!-- Hero Area -->
+    <div class="hero-area section-bg2">
+        <!-- Your hero area content goes here -->
+    </div>
+    <!-- End Hero Area -->
+
+    <!-- Event Details -->
+    <section class="evenement_area single-post-area section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="single-post">
+                        <!-- Feature Image -->
+                        <div class="feature-img">
+                            <img class="img-fluid" src="{{ evenement.image }}" alt="Event Image">
+                        </div>
+                        <!-- End Feature Image -->
+
+                        <div class="evenement_details">
+                            <h2 class="text-center mt-4 mb-3">{{ evenement.nom }}</h2>
+
+                            <li class="facebook">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ absolute_url(path('detailevent', {'id': evenement.getId()})) }}" class="social-icon social-facebook" title="Facebook" target="_blank">
+                                    partager sur facebook
+                                </a>
+                            </li>
+                            <li class="twitter">
+                                <a href="https://twitter.com/intent/tweet?text={{ evenement.nom|url_encode }}%20{{ absolute_url(path('detailevent', {'id': evenement.getId()})) }}%20@FemHealth" class="social-icon social-twitter" title="Twitter" target="_blank">
+                                    Twitter
+                                </a>
+                            </li>
+
+                            <!-- Other Event Details -->
+                            <p class="excert">{{ evenement.localisation }}</p>
+                            <p class="excert">Date de début: {{ evenement.dateDebut ? evenement.dateDebut|date('Y-m-d') : ''}}</p>
+                            <p class="excert">Date de fin: {{ evenement.dateFin ? evenement.dateFin|date('Y-m-d') : ''}}</p>
+                            <p class="excert">Montant: {{ evenement.montant }}</p> 
+                          
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <a href="{{ path('app_reservation_newfront', {'id': evenement.getId()}) }}" class="btn btn-primary">Réserver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Event Details -->
+
+</main>
+{% endblock %}

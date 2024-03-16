@@ -1,0 +1,16 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+<table>
+    <tr>
+        <td>{{ form_label(form.Nom, 'Nom') }}</td>
+        <td>{{ form_widget(form.Nom) }}</td>
+        <td>{{ form_errors(form.Nom) }}</td>
+    </tr>
+    <tr>
+        <td>{{ form_label(form.Duree_contrat, 'Durée du contrat') }}</td>
+        <td>{{ form_widget(form.Duree_contrat) }}</td>
+        <td>{{ form_errors(form.Duree_contrat) }}</td>
+    </tr>
+    <tr>
+    </table>
+    <button type="submit" class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+    {{ form_end(form) }}

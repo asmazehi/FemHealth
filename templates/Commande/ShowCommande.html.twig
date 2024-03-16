@@ -1,0 +1,157 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="{{ asset('front/css/style.pink.css') }}" id="theme-stylesheet">
+
+    <body>
+    <!-- navbar-->
+    <header class="header mb-5"></header>
+    <div id="all">
+        <div id="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- breadcrumb-->
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb d-flex justify-content-between">
+
+                                    <div class="position-relative">
+                                        <button type="button" class="btn btn-primary position-relative" id="inbox-button">
+                                            Inbox
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">1<span class="visually-hidden"></span>
+                                            </span>
+                                        </button>
+                                        <span class="badge bg-light text-dark position-absolute top-0 end-100 translate-middle badge rounded-pill bg-danger inbox-message" id="inbox-icon" style="display: none;">
+                                            Commande envoyée avec succès !
+                                        </span>
+
+                                    </div>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div id="checkout" class="col-lg-9">
+                        <div class="box">
+                            <form method="get" action="{{ path('listcommande') }}">
+                                <h1>Checkout - Order review</h1>
+                                <div class="nav flex-column flex-sm-row nav-pills">
+                                    <a href="checkout1.html" class="nav-link flex-sm-fill text-sm-center"> <i class="fa fa-map-marker"></i>Address</a>
+                                    <a href="checkout2.html" class="nav-link flex-sm-fill text-sm-center"></a>
+                                    <a class="nav-link flex-sm-fill text-sm-center active"> <i class="fa fa-eye"></i>Order Review</a>
+                                </div>
+                                <div class="content">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th colspan="2">Product</th>
+                                                <th>Quantity</th>
+                                                <th>Unit price</th>
+                                                <th>Discount</th>
+                                                <th>Total</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% set total = 0 %}
+                                            {% for lp in lignePanier %}
+                                                <tr>
+                                                    <td><a href="#"><a>{{ lp.getProduit().getNom() }}</a></a></td>
+                                                    <td><a href="#"><a>{{ lp.getProduit().getCategorie() }}</a></a></td>
+                                                    <td>{{lp.getQuantite()}}</td>
+                                                    <td><a>{{  lp.getProduit().getPrix() }}</a>DT</td>
+                                                    <td>0.00DT</td>
+                                                    <td><a>{{ lp.getProduit().getPrix()*lp.getQuantite() }}</a>DT</td>
+                                                </tr>
+                                                {% set total =  lp.getPanier().getPrixTotal()  %}
+                                            {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <th colspan="5">Total</th>
+                                                <th>{{total}}DT</th>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <!-- /.table-responsive-->
+                                </div>
+                                <!-- /.content-->
+
+                                <div class="box-footer d-flex justify-content-between">
+                                    <a href="{{ path('Commande_update',{'idp': idp})}}" class="btn btn-outline-secondary"><i class="fa fa-chevron-left"></i>commande</a>
+                                    <button type="submit" class="btn btn-primary">Show your command<i class="fa fa-chevron-right"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.box-->
+                    </div>
+                    <!-- /.col-lg-9-->
+                    <div class="col-lg-3">
+                        <div id="order-summary" class="card">
+                            <div class="card-header">
+                                <h3 class="mt-4 mb-4">Order summary</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">Shipping and additional costs are calculated based on the values you have entered.</p>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>Order subtotal</td>
+                                            <th>{{ total }}DT</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Shipping and handling</td>
+                                            <th>10.00DT</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Tax</td>
+                                            <th>0.00DT</th>
+                                        </tr>
+                                        <tr class="total">
+                                            {% set autreVariable = 10 + total %}
+                                            <td>Total</td>
+                                            <th>{{ autreVariable }}DT</th>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col-lg-3-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <style>
+        .inbox-message {
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
+
+    <script>
+        // Détecter le chargement de la page
+        document.addEventListener("DOMContentLoaded", function() {
+            // Sélection du bouton Inbox
+            const inboxButton = document.getElementById("inbox-button");
+            // Sélection de l'icône de succès
+            const successIcon = document.getElementById("inbox-icon");
+
+            // Ajout d'un écouteur d'événement pour le clic sur le bouton Inbox
+            inboxButton.addEventListener("click", function() {
+                // Afficher l'icône de succès à droite pendant 3 secondes
+                successIcon.style.display = "inline-block";
+                setTimeout(function() {
+                    successIcon.style.display = "none";
+                }, 3000);
+            });
+        });
+    </script>
+
+    </body>
+{% endblock %}

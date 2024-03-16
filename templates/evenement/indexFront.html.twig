@@ -1,0 +1,183 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Evenement index{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles for this page */
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        h1 {
+            color: #007bff;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .dropdown-menu {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+        .dropdown-item {
+            color: #495057;
+        }
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #007bff;
+        }
+        .table {
+            background-color: #ffffff;
+        }
+        .table th, .table td {
+            border: 1px solid #dee2e6;
+        }
+        .table th {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="text-center mb-4">Evenement:</h1>
+    <table class="table table-bordered">
+        <tr>
+            <td colspan="2">
+                <div id="google_translate_element">
+                    <button onclick="speakSelectedText()" class="btn btn-primary">Lire en vocal</button>
+                    <button onclick="stopSpeaking()" class="btn btn-primary ml-2">Arrêter</button>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <form action="{{ path('app_evenement_indexFront') }}" method="POST">
+                    <div class="form-group">
+                        <label for="color">Rechercher:</label>
+                        <input type="text" id="nom" name="nom" class="form-control" value="{{ app.request.request.get('nom') }}" >
+                    </div>
+                    <button type="submit" class="btn btn-primary">Rechercher</button>
+                </form>
+            </td>
+            <td>
+                <form action="{{ path('app_evenement_indexFront') }}" method="GET">
+                    <button type="submit" class="btn btn-primary">Annuler</button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Type
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for evenement in evenement %}
+                            <a class="dropdown-item" href="{{ path('listevent1', {'typeId': evenement.type.id}) }}">{{ evenement.type }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="montantDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Filtrer par montant
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="montantDropdown">
+                        <a class="dropdown-item" href="{{ path('evenement_list_by_montant', {'montant': -500}) }}">Moins de 500</a>
+                        <a class="dropdown-item" href="{{ path('evenement_list_by_montant', {'montant': 500}) }}">Plus de 500</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Nom de l'événement</th>
+                    <th>Montant</th> 
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for evenement in evenement %}
+                    <tr>
+                        <td><img src="{{ evenement.image }}" alt="Event Image" style="max-width: 100px;"></td>
+                        <td>{{ evenement.nom }}</td>
+                        <td>{{ evenement.montant }}</td>
+                        <td>
+                            <a href="{{ path('detailevent', {'id': evenement.getId()}) }}" class="btn btn-primary">Voir les détails</a>
+                            <form action="{{ path('evenement_signaler', {'id': evenement.id}) }}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger">Signaler</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var currentUtterance = null;
+
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+    }
+
+    function speakSelectedText() {
+        var selectedText = window.getSelection().toString();
+        if (selectedText) {
+            stopSpeaking();
+            currentUtterance = new SpeechSynthesisUtterance(selectedText);
+            window.speechSynthesis.speak(currentUtterance);
+        } else {
+            alert("Veuillez sélectionner du texte pour le lire à voix haute.");
+        }
+    }
+
+    function stopSpeaking() {
+        if (currentUtterance !== null) {
+            window.speechSynthesis.cancel();
+            currentUtterance = null;
+        }
+    }
+
+    function selectLanguage(languageCode) {
+        var select = document.querySelector('.goog-te-combo');
+        for (var i = 0; i < select.options.length; i++) {
+            var option = select.options[i];
+            if (option.value === languageCode) {
+                select.selectedIndex = i;
+                select.dispatchEvent(new Event('change'));
+                break;
+            }
+        }
+    }
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+{% endblock %}
+
+
+
+

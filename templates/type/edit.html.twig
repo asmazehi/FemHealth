@@ -1,0 +1,42 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Edit Type{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body {
+            background-color: #190909;
+        }
+
+        .code-container {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            position: absolute;
+            top: 50%;
+            right: 50px;
+            transform: translateY(-50%);
+        }
+
+        @media (max-width: 768px) {
+            .code-container {
+                position: static;
+                margin-top: 20px;
+                transform: none;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="code-container">
+        <h1>Edit Type</h1>
+
+        {{ include('type/_form.html.twig', {'button_label': 'Update'}) }}
+
+        <a href="{{ path('app_type_index') }}">back to list</a>
+
+        {{ include('type/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

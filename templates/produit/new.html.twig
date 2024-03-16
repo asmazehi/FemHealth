@@ -1,0 +1,20 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}New Produit{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Création d'un nouveau produit</h1>
+            <div class="card">
+                <div class="card-body">
+                    {{ include('produit/_form.html.twig') }}
+                </div>
+            </div>
+            <div class="mt-4">
+                <a href="{{ path('app_produit_index') }}" class="btn btn-secondary">Retourner à la liste des produits</a>
+            </div>
+        </div>
+    </div>
+    <script src="{{ asset('js/main.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produit index{% endblock %}
+
+{% block body %}
+    <div class="container py-4">
+        <div class="d-flex justify-content-end mb-2">
+            <a href="{{ path('liste_produits_par_panier') }}" class="btn btn-primary btn-sm rounded-pill grey-cart"><i class="fas fa-shopping-cart"></i> Panier</a>
+        </div>
+        <h1 class="mb-4">Veuillez choisir la catégorie des produits souhaités</h1>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Filtrer par catégorie
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{{ path('app_produit_indexFront') }}">Toutes Les Catégories</a>
+                <a class="dropdown-item" href="{{ path('produit_list_by_categorie', {'categorie': 'Nutrition'}) }}">Nutrition</a>
+                <a class="dropdown-item" href="{{ path('produit_list_by_categorie', {'categorie': 'Santé Mentale'}) }}">Santé Mentale</a>
+                <a class="dropdown-item" href="{{ path('produit_list_by_categorie', {'categorie': 'Sport'}) }}">Sport</a>
+            </div>
+        </div>
+
+        <div class="row">
+            {% if pagination is not null %}
+                {% for produit in pagination %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="{{asset('assets/uploads/product/' ~ produit.image)}}" class="card-img-top" alt="Image Produit">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ produit.Nom }}</h5>
+                                <p class="card-text">Prix: 
+                                    {% if produit.TauxRemise > 0 %}
+                                        <span class="text-muted">{{ produit.Prix }} DT</span> 
+                                        <span class="font-weight-bold">{{ 1 - ((produit.Prix * produit.TauxRemise)/100) }} DT</span>
+                                    {% else %}
+                                        {{ produit.Prix }} DT
+                                    {% endif %}
+                                </p>
+                                <p class="card-text">Taux de Remise: 
+                                    {% if produit.TauxRemise > 0 %}
+                                        <span class="text-danger">{{ produit.TauxRemise * 1 }}%</span>
+                                    {% else %}
+                                        Aucune
+                                    {% endif %}
+                                </p>
+                                <p class="card-text">Catégorie: {{ produit.Categorie }}</p>
+                                <p class="card-text">{{ produit.Description }}</p>
+                                <a href="{{ path('add-produit', {'id': produit.id}) }}" class="btn btn-primary btn-sm rounded-pill">Ajouter au panier</a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-md-12">
+                        <p>Pas encore de produits dans cette catégorie</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-md-12">
+                    <p>Pas encore de produits dans cette catégorie</p>
+                </div>
+            {% endif %}
+        </div>
+        {% if pagination is not null %}
+            <div class="d-flex justify-content-center">{{ knp_pagination_render(pagination, 'bootstrap_4_pagination.html.twig') }}</div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Commentaire index{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">Table Des commentaires</h1>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Taux des offres</h4>
+                <canvas id="myChart" style="width:100%;max-width:900px"></canvas>
+                <div class="table-responsive">
+                    <table class="table text-white">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Description</th>
+                                <th>Date de commentaire</th>
+                                <th>UserName</th>
+                                <th>État</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for commentaire in commentaires|sort((a, b) => a.datecomnt > b.datecomnt ? -1 : 1) %}
+    <tr>
+        <td>{{ commentaire.id }}</td>
+        <td>{{ commentaire.Description }}</td>
+        <td>{{ commentaire.datecomnt|date('Y-m-d H:i') }}</td>
+        <td>{{ commentaire.user.username }}</td> {# Accès au nom d'utilisateur associé au commentaire #}
+        <td>
+            <form action="{{ path('app_activation_comment', {'id': commentaire.id}) }}" method="post">
+                <select name="actif" onchange="this.form.submit()" class="form-control" style="color: white">
+                    <option {% if commentaire.isActive %} selected {% endif %} value="actif">Actif</option>
+                    <option {% if not commentaire.isActive %} selected {% endif %} value="inactif">Inactif</option>
+                </select>
+            </form>
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="5">Aucun enregistrement trouvé</td>
+    </tr>
+{% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <a href="{{ path('app_publication_index') }}">Retour aux publications</a>
+    </div>
+</div>
+
+<h1>Chart</h1>
+
+    <canvas id="myChart"></canvas>
+
+    {% block chart_script %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+        <script>
+            let commentairesNames = [];
+            let commentairesPrices = [];
+
+            {% for commentaire in commentaires %}
+                commentairesNames.push("{{ commentaire.description|e('js') }}");
+                commentairesPrices.push({{ commentaire.id }});
+            {% endfor %}
+
+            function getRandomColor() {
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 15)];
+                }
+                return color;
+            }
+
+            let chartData = {
+                labels: commentairesNames,
+                datasets: [{
+                    data: commentairesPrices,
+                    backgroundColor: commentairesNames.map(name => getRandomColor())
+                }]
+            };
+
+            let chartOptions = {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: "Taux des offres"
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            };
+
+            let ctx = document.getElementById('myChart').getContext('2d');
+            let myChart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: chartOptions
+            });
+        </script>
+    {% endblock %}
+{% endblock %}

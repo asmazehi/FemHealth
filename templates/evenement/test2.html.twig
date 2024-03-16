@@ -1,0 +1,27 @@
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/js/fullcalendar/core/main.min.js') }}"></script>
+    <script src="{{ asset('build/js/fullcalendar/daygrid/main.min.js') }}"></script>
+    <script src="{{ asset('build/js/fullcalendar/locales/fr.js') }}"></script> {# Si vous souhaitez utiliser la localisation française #}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let calendarElt = document.getElementById('calendrier');
+
+            let calendar = new FullCalendar.Calendar(calendarElt, {
+                plugins: [ 'dayGrid' ],
+                initialView: 'dayGridMonth',
+                locale: 'fr',  // Utilisez la localisation française si elle est incluse
+                events: '{{ path('events') }}',  // Spécifiez l'URL pour récupérer les événements depuis votre backend
+                eventContent: function(info) {
+                    return {
+                        html: `<div class="fc-content">${info.event.title}</div>
+                               <div class="fc-description">${info.event.extendedProps.description}</div>`
+                    };
+                },
+            });
+
+            calendar.render();
+        });
+    </script>
+{% endblock %}

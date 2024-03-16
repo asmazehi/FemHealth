@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Publication index{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+    <div class="d-flex flex-column align-items-start">
+        <!-- Formulaire de recherche -->
+        <form action="{{ path('frontmetier') }}" method="get">
+            <input type="text" name="search" id="searchInput" placeholder="Search...">
+            <input type="date" name="date" id="dateInput">
+            <button type="submit" id="resetDateFilterButton">Reset date filter</button>
+        </form>
+    </div>
+    
+    <div class="row">
+        {% for publication in p %}
+            <div class="col-md-3 mb-4"> {# Adjusted column size for 4 publications per row #}
+                <div class="card">
+                    <div class="card-body">
+                        <span style="color: rgb(241, 8, 125);">Titre: {{ publication.titre }} </span>
+                        <div class="card-footer text-muted text-right">
+                            <span style="color: rgb(241, 8, 125);"> {{ publication.datepub|date('Y-m-d H:i') }}</span>
+                        </div>
+                        {% if publication.image %}
+                            <img src="{{ asset('uploads/' ~ publication.image) }}" alt="Publication Image" class="img-fluid mb-3 publication-image">
+                        {% endif %}
+                    </div>
+                    <div class="card-footer text-muted text-right">
+                        <a href="{{ path('app_publication_show', {'id': publication.id}) }}" style="text-decoration: underline;">Voir plus de détails</a>
+                    </div>
+                </div>
+            </div>
+            {% if loop.index % 4 == 0 %}
+                </div><div class="row">
+            {% endif %}
+        {% else %}
+            <div class="col-md-12">
+                <div class="alert alert-warning" role="alert">
+                    No records found.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {# Pagination Navigation #}
+    <div class="row mt-4">
+        <div class="col-md-12">
+            {{ knp_pagination_render(p) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

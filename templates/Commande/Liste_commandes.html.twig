@@ -1,0 +1,71 @@
+{% extends 'baseAdmin.html.twig' %}
+{% block body %}
+
+    <style>
+        /* Style pour les boutons "Marquer Terminée" */
+        .btn-marquer-terminée {
+            background-color: fuchsia; /* Couleur de fond */
+            color: white; /* Couleur du texte */
+            border: none; /* Suppression de la bordure */
+            padding: 5px 10px; /* Espacement interne */
+            cursor: pointer; /* Curseur au survol */
+            border-radius: 4px; /* Coins arrondis */
+        }
+
+        /* Style pour les boutons "Marquer Terminée" au survol */
+        .btn-marquer-terminée:hover {
+            background-color: darkmagenta; /* Couleur de fond au survol */
+        }
+    </style>
+
+    <form action="/traitement_formulaire" method="POST">
+        <table>
+            <h2>liste des commandes</h2>
+            <h2>l</h2>
+            <h1>liste des commandes</h1>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>M_Paiement</th>
+                <th>M_Livraison</th>
+                <th>Mantant</th>
+                <th>Date_Commande</th>
+                <th>Téléphone</th>
+                <th>Statut</th>
+                <th>Modifier_Statut</th>
+                <th>Produits</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for commandeClient in listeCommandesClients %}
+                <tr>
+                    <td>{{ commandeClient.id }}</td>
+                    <td>{{ commandeClient.nom }}</td>
+                    <td>{{ commandeClient.adresse }}</td>
+                    <td>{{ commandeClient.methodePaiement }}</td>
+                    <td>{{ commandeClient.methodeLivraison }}</td>
+                    <td>{{ commandeClient.Montant}}</td>
+                    <td>{{ commandeClient.DateC|date('Y-m-d') }}</td>
+                    <td>{{ commandeClient.phone }}</td>
+                    <td>{{ commandeClient.statut }}</td>
+                    <td>
+                        {% if commandeClient.statut == 'en_cours' %}
+                            <a href="{{ path('modifier_statut_commande', {'idc': commandeClient.idc}) }}" class="btn btn-marquer-terminée">Marquer Terminée</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <ul>
+                            {% for produit in commandeClient.produits %}
+                                <li>{{ produit.nom }}</li>
+                                <!-- Afficher d'autres informations sur le produit si nécessaire -->
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
+{% endblock %}

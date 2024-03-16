@@ -1,0 +1,20 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Edit Sponsor{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Edit produit</h1>
+            <div class="card mb-4">
+                <div class="card-body">
+                    {{ include('produit/_form.html.twig', {'button_label': 'Update'}) }}
+                </div>
+            </div>
+            <div class="mt-4">
+                <a href="{{ path('app_produit_index') }}" class="btn btn-secondary btn-block">Back to List</a>
+            </div>
+        </div>
+    </div>
+    <script src="{{ asset('js/main.js') }}"></script>
+{% endblock %}

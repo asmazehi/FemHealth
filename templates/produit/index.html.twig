@@ -1,0 +1,67 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Produit index{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Table Des Produits</h1>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table text-white">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Prix</th>
+                                    <th>Taux de Remise</th>
+                                    <th>Catégorie</th>
+                                    <th>Image</th>
+                                    <th>Description</th>
+                                    <th>Appartient au Sponsor</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for produit in produits %}
+                                    <tr>
+                                        <td>{{ produit.id }}</td>
+                                        <td>{{ produit.Nom }}</td>
+                                        <td>{{ produit.Prix }}</td>
+                                        <td>{{ produit.TauxRemise }}</td>
+                                        <td>{{ produit.Categorie }}</td>
+                                        <td>
+                                            <img src="{{asset('assets/uploads/product/' ~ produit.image)}}" alt="Image Produit" style="max-width: 100px; max-height: 100px;">
+                                        </td>
+                                        
+                                        <td>{{ produit.Description }}</td>
+                                        <td>{{ produit.sponsor }}</td>
+                                        <td>
+                                            <a href="{{ path('app_produit_show', {'id': produit.id}) }}" class="btn btn-info btn-sm">Afficher</a>
+                                            <a href="{{ path('app_produit_edit', {'id': produit.id}) }}" class="btn btn-primary btn-sm">Editer</a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="9">Pas encore de produits</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <a href="{{ path('app_produit_new') }}" class="btn btn-success">Créer un nouveau produit</a>
+                    <div style="text-align: center;">
+                        <form action="{{ path('searchProducts') }}" method="get" class="search-form">
+                        <input type="text" name="search_query" placeholder="Nom?Categorie oou Description?...">
+                        <button type="submit" class="btn-link">rechercher</button>
+                        </form>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

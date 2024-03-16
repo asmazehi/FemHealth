@@ -1,0 +1,42 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}New Evenement{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Add your custom styles */
+        .content-container {
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f8f9fa; /* Light gray background */
+        }
+
+        .btn-back {
+            color: #fff;
+            background-color: #007bff; /* Bootstrap primary color */
+            border-color: #007bff; /* Bootstrap primary color */
+        }
+
+        .btn-back:hover {
+            color: #fff;
+            background-color: #0056b3; /* Darker shade of primary color */
+            border-color: #0056b3; /* Darker shade of primary color */
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="content-container mt-5">
+                <h1 class="text-center mb-4">Create new Evenement</h1>
+                {{ include('evenement/_form.html.twig') }}
+
+                <a href="{{ path('app_evenement_index') }}" class="btn btn-back mt-3">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

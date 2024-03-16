@@ -1,0 +1,52 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Commentaire index{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">Table Des commentaires</h1>
+        <div class="card">
+            <div class="card-body">
+                
+                <div class="table-responsive">
+                    <table class="table text-black">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Date de commentaire</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for commentaire in commentaires %}
+            <tr>
+                <td>{{ commentaire.id }}</td>
+                
+                <td>{{ commentaire.Description }}</td>
+                <td>{{ commentaire.datecomnt |date('Y-m-d') }}</td>
+                <td>
+                    <a href="{{ path('app_commentaire_show', {'id': commentaire.id}) }}">afficher</a>
+                    <a href="{{ path('app_commentaire_edit', {'id': commentaire.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+</div>
+</div>
+    
+    
+    <a href="{{ path('app_publication_index') }}">Retour au publication</a>
+</div>
+</div>
+</div>
+{% endblock %}

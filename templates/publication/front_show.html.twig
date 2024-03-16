@@ -1,0 +1,68 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Publication{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">Publication</h1>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ publication.id }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ publication.titre }}</td>
+            </tr>
+            <tr>
+                <th>date_pub</th>
+                <td>{{ publication.datepub|date('Y-m-d') }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ publication.Image }}</td>
+            </tr>
+            <tr>
+                <th>Contenu</th>
+                <td>{{ publication.Contenu }}</td>
+            </tr>
+            <tr>
+                <th>Les commentaires</th>
+                <td><div class="card-footer text-muted">
+                    <strong>Commentaires:</strong>
+                    {% if publication.commentaires %}
+    {% for commentaire in publication.commentaires %}
+        <div>
+            <strong>{{commentaire.user.username}}</strong>: {{ commentaire.description }}
+        </div>
+    {% endfor %}
+{% else %}
+    <div>Aucun commentaire.</div>
+{% endif %}
+
+                </div></td>
+            </tr>
+            <tr>
+                <th>Ajouter commentaires</th>
+                <td><a href="{{ path('app_commentaire_new', {'id': publication.id}) }}" class="btn btn-sm btn-primary">Ajouter commentaire</a></td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+    <a href="{{ path('app_publication_index') }}">Retour à la liste</a>
+    {{ include('publication/delete.html.twig') }}
+</div>
+</div>
+</div>
+</div>
+</div>
+
+{% endblock %}

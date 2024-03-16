@@ -1,0 +1,15 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Edit Publication{% endblock %}
+
+{% block body %}
+<div style="padding:150px;">
+    <h1>Edit Publication</h1>
+
+    {{ include('publication/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_publication_index') }}">Retour à la liste</a>
+
+    {{ include('publication/delete.html.twig') }}
+</div>
+{% endblock %}

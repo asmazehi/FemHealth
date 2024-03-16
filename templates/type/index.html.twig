@@ -1,0 +1,39 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Type index{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="text-center mb-4">Type index</h1>
+
+    <div class="table-responsive">
+        <table class="table table-bordered  text-white">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for type in types %}
+                    <tr>
+                        <td>{{ type.id }}</td>
+                        <td>{{ type.type }}</td>
+                        <td>
+                            <a href="{{ path('app_type_show', {'id': type.id}) }}" class="btn btn-info btn-sm">Show</a>
+                            <a href="{{ path('app_type_edit', {'id': type.id}) }}" class="btn btn-primary btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">No records found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{{ path('app_type_new') }}" class="btn btn-success">Create new</a>
+</div>
+{% endblock %}

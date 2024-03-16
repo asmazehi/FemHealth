@@ -1,0 +1,40 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Sponsor{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Sponsor</h1>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>ID</th>
+                                    <td>{{ sponsor.id }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nom</th>
+                                    <td>{{ sponsor.Nom }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Durée Contrat</th>
+                                    <td>{{ sponsor.DureeContrat }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-4">
+                        <a href="{{ path('app_sponsor_index') }}" class="btn btn-secondary">Retourner à la liste des sponsors</a>
+                        <a href="{{ path('app_sponsor_edit', {'id': sponsor.id}) }}" class="btn btn-primary">Editer</a>
+                        <a href="{{ path('generate_pdf', {'id': sponsor.id}) }}" class="btn btn-primary">Générer PDF</a>
+                        
+                    </div>
+                </div>
+            </div>
+            {{ include('sponsor/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

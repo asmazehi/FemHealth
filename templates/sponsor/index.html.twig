@@ -1,0 +1,46 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Sponsor index{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Table Des Sponsors</h1>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table text-white">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Durée Contrat</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sponsor in sponsors %}
+                                    <tr>
+                                        <td>{{ sponsor.id }}</td>
+                                        <td>{{ sponsor.Nom }}</td>
+                                        <td>{{ sponsor.DureeContrat }}</td>
+                                        <td>
+                                            <a href="{{ path('app_sponsor_show', {'id': sponsor.id}) }}" class="btn btn-info btn-sm">Afficher</a>
+                                            <a href="{{ path('app_sponsor_edit', {'id': sponsor.id}) }}" class="btn btn-primary btn-sm">Editer</a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4">Pas encore de sponsors</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <a href="{{ path('app_sponsor_new') }}" class="btn btn-success">Create New Sponsor</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

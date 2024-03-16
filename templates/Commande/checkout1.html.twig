@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Google fonts - Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700">
+    <!-- owl carousel-->
+    <link rel="stylesheet" href="vendor/owl.carousel/assets/owl.carousel.css">
+    <link rel="stylesheet" href="vendor/owl.carousel/assets/owl.theme.default.css">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="{{ asset('front/css/style.pink.css') }}"/>
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="favicon.png">
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    </head>
+    <body>
+    <!-- navbar-->
+    <header class="header mb-5">
+        <!--
+        *** TOPBAR ***
+        _________________________________________________________
+        -->
+
+
+        <div id="login-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true" class="modal fade">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Customer login</h5>
+                        <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="customer-orders.html" method="post">
+                            <div class="form-group">
+                                <input id="email-modal" type="text" placeholder="email" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <input id="password-modal" type="password" placeholder="password" class="form-control">
+                            </div>
+                            <p class="text-center">
+                                <button class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
+                            </p>
+                        </form>
+                        <p class="text-center text-muted">Not registered yet?</p>
+                        <p class="text-center text-muted"><a href="register.html"><strong>Register now</strong></a>! It is easy and done in 1 minute and gives you access to special discounts and much more!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- *** TOP BAR END ***-->
+
+
+        </header>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="banner"><a href="#"><img src="img/banner.jpg" alt="" class="img img-fluid"></a></div>
+            <div class="banner"><a href="#"><img src="img/banner2.jpg" alt="" class="img img-fluid"></a></div>
+        </div>
+        </div>
+        </li>
+        </ul>
+        </li>
+
+        <div id="all" >
+            <div id="content" >
+                <div class="container">
+                    <div class="row"  >
+                        <div class="col-lg-12" >
+                            <!-- breadcrumb-->
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li aria-current="page" class="breadcrumb-item active" >Checkout - Address</li>
+                                </ol>
+                            </nav>
+                        </div>
+                        <div id="checkout" class="col-lg-9" class=""  > <!--------------->
+                            <div class="box"  >
+                                {{ form_start(form ,{'attr':{'novalidate': 'novalidate'} }) }}
+
+                                <h1>Checkout - Address</h1>
+                                    <div class="nav flex-column flex-md-row nav-pills text-center "  ><a href="checkout1.html" class="nav-link flex-sm-fill text-sm-center active"> <i class="fa fa-map-marker">                  </i>Address</a><a href="#" class="nav-link flex-sm-fill text-sm-center disabled"> <i class="fa fa-truck">                       <i class="fa fa-money">                                          </i>Order Review</a></div>
+                                    <div class="content py-3" >
+                                        <div class="row" >
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    {{ form_label(form.adress) }}
+                                                    {{ form_widget(form.adress, {'attr': {'class': 'form-control'}}) }}
+                                                    {{ form_errors(form.adress) }}
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    {{ form_label(form.Methode_paiement) }}
+                                                    {{ form_widget(form.Methode_paiement, {'attr': {'class': 'form-control'}}) }}
+                                                    {{ form_errors(form.Methode_paiement) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.row-->
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    {{ form_label(form.phone) }}
+                                                    {{ form_widget(form.phone, {'attr': {'class': 'form-control'}}) }}
+                                                    {{ form_errors(form.phone) }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    {{ form_label(form.methode_livraison) }}
+                                                    {{ form_widget(form.methode_livraison, {'attr': {'class': 'form-control'}}) }}
+                                                    {{ form_errors(form.methode_livraison) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.row-->
+
+
+
+
+
+
+
+                                        </div>
+                                        <!-- /.row-->
+                                    </div>
+                                    <div class="box-footer d-flex justify-content-between "><a href="{{ path('liste_produits_par_panier') }}" class="btn btn-outline-secondary"><i class="fa fa-chevron-left"></i>Back to Card</a>
+
+                                        <button type="submit" class="btn btn-primary">Continue to Delivery Method<i class="fa fa-chevron-right"></i></button>
+
+
+
+                                    </div>
+                            {{ form_end(form) }}
+
+                        </div>
+                            <!-- /.box-->
+
+
+                            </div>
+                        </div>
+                        <!-- /.col-lg-3-->
+                        </div>
+
+
+
+    </body>
+
+
+{% endblock %}

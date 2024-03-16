@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %} 
+
+{% block title %}Publication index{% endblock %}
+
+{% block body %}
+
+    <style>
+        .rating {
+            display: inline-block;
+            width: 100%;
+            margin-top: 40px;
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        .like,
+        .dislike {
+            display: inline-block;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .dislike:hover,
+        .like:hover {
+            color: #2EBDD1;
+            transition: all .2s ease-in-out;
+            transform: scale(1.1);
+        }
+
+        .active {
+            color: #2EBDD1;
+        }
+
+        .commentaire-inactif {
+            display: none;
+        
+        }
+        .commentaire-text {
+            color: black;
+        }
+        
+    </style>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 mb-4 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <span style="color: rgb(241, 8, 125);">Titre: {{ publication.titre }} </span>
+                        <div class="card-footer text-muted text-right">
+                            <span style="color: rgb(241, 8, 125);"> {{ publication.datepub|date('Y-m-d') }}</span>
+                        </div>
+                        {% if publication.image %}
+                            <img src="{{ asset('uploads/' ~ publication.image) }}" alt="Publication Image" class="img-fluid mb-3 publication-image">
+                        {% endif %}
+                        <p class="card-text" style="color: black;">{{ publication.Contenu|slice(0, 150) }}{{ publication.Contenu|length > 150 ? '...' : '' }}</p>
+                    </div>
+                    <div class="card-footer text-muted" style="color: black;">
+                        <strong style="color: rgb(241, 8, 125);">Commentaires:</strong>
+                        {% if publication.commentaires %}
+                        {% for commentaire in publication.commentaires %}
+                        <div class="commentaire {% if not commentaire.isActive %} commentaire-inactif {% endif %}">
+                            <span class="commentaire-text">{{ commentaire }}</span>
+                            <span class="like-commentaire" data-commentaire-id="{{ commentaire.id }}">
+                                <i class="fa fa-thumbs-up fa-lg like-icon" aria-hidden="true"></i>
+                                <span class="likes-count">{{ commentaire.likes }}</span>
+                            </span>
+                        </div>
+                    {% endfor %}
+                    
+{% else %}
+    <span style="color: black;">Aucun commentaire.</span>
+{% endif %}
+
+                        <div class="rating">
+                            <!-- Thumbs up -->
+                            <div class="like grow">
+                                <i class="fa fa-thumbs-up fa-3x like" aria-hidden="true"></i>
+                            </div>
+                            <!-- Thumbs down -->
+                            <div class="dislike grow">
+                                <i class="fa fa-thumbs-down fa-3x like" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted text-right">   
+                        <a href="{{ path('app_commentaire_new', {'id': publication.id}) }}" class="btn btn-sm btn-primary">Ajouter commentaire</a>
+                    </div>
+                    <div class=" text-muted text-left">
+                        <a href="{{ path('app_front_index') }}" style="color: rgb(241, 8, 125); text-decoration: underline;">Retour à la liste</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var commentairesInactifs = document.querySelectorAll('.commentaire-inactif');
+            commentairesInactifs.forEach(function(commentaire) {
+                commentaire.style.display = 'none';
+            });
+        });
+        
+    </script>
+{% endblock %}

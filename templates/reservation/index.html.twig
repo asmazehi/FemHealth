@@ -1,0 +1,43 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Reservation index{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center mb-4 text-white">Reservation Index</h1>
+
+            <table class="table table-bordered  text-white">
+                <thead>
+                    <tr>
+                        <th class="text-white">Id</th>
+                        <th class="text-white">Statut Paiement</th>
+                        <th class="text-white">Mode Paiement</th>
+                        <th class="text-white">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for reservation in reservations %}
+                    <tr>
+                        <td class="text-white">{{ reservation.id }}</td>
+                        <td class="text-white">{{ reservation.statutPaiement }}</td>
+                        <td class="text-white">{{ reservation.modePaiement }}</td>
+                        <td>
+                            <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}" class="btn btn-info btn-sm">Show</a>
+                            <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}" class="btn btn-primary btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center text-white">No records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <a href="{{ path('app_reservation_new') }}" class="btn btn-success">Create New</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

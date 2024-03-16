@@ -1,0 +1,15 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Edit Commentaire{% endblock %}
+
+{% block body %}
+<div style="padding:150px;">
+    <h1>Edit Commentaire</h1>
+
+    {{ include('commentaire/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_publication_index') }}">back to list</a>
+
+    {{ include('commentaire/delete.html.twig') }}
+</div>
+{% endblock %}

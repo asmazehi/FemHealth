@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des commandes{% endblock %}
+
+{% block body %}
+    <h1>Liste des commandes</h1>
+    {% if commandesAvecProduits is empty %}
+        <p>Aucune commande trouvée.</p>
+    {% else %}
+        <table>
+            <thead>
+            <tr>
+
+                <th>Date_commande</th>
+                <th>Adresse_livraison</th>
+                <th>Méthode_paiement</th>
+                <th>Méthode_livraison</th>
+                <th>Produits</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for commandeAvecProduits in commandesAvecProduits %}
+                <tr>
+
+                    <td>{{ commandeAvecProduits.commande.getDateC()|date('d/m/Y') }}</td>
+                    <td>{{ commandeAvecProduits.commande.getAdress() }}</td>
+                    <td>{{ commandeAvecProduits.commande.getMethodePaiement() }}</td>
+                    <td>{{ commandeAvecProduits.commande.getMethodeLivraison() }}</td>
+                    <td>{{ commandeAvecProduits.commande.getStatut() }}</td>
+                    <td>
+                        {% if commandeAvecProduits.commande.getStatut() == 'en_cours' %}
+                            <a href="{{ path('modifier_statutC', {'idc': commandeAvecProduits.commande.getId()}) }}" >Annuler</a>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <ul>
+                            {% for produit in commandeAvecProduits.produits %}
+                                <li>{{ produit.getNom() }} - </li>
+
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
